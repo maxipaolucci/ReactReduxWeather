@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import Chart from '../components/chart';
-import GoogleMap from '../components/google_map';
-
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import Chart from "../components/chart";
+import GoogleMap from "../components/google_map";
 
 class WeatherList extends Component {
-  
   renderWeather(cityData) {
     const name = cityData.city.name;
     const temps = cityData.list.map(weather => weather.main.temp);
@@ -15,9 +13,11 @@ class WeatherList extends Component {
 
     return (
       <tr key={cityData.city.id}>
-        <td><GoogleMap lon={lon} lat={lat}  /></td>
         <td>
-          <Chart data={temps} color="orange" units="K"/>
+          <GoogleMap lon={lon} lat={lat} />
+        </td>
+        <td>
+          <Chart data={temps} color="orange" units="K" />
         </td>
         <td>
           <Chart data={pressures} color="blue" units="hPa" />
@@ -28,7 +28,7 @@ class WeatherList extends Component {
       </tr>
     );
   }
-  
+
   render() {
     return (
       <table className="table table-hover">
@@ -40,16 +40,15 @@ class WeatherList extends Component {
             <th>Humidity (%)</th>
           </tr>
         </thead>
-        <tbody>
-          {this.props.weather.map(this.renderWeather)}
-        </tbody>
+        <tbody>{this.props.weather.map(this.renderWeather)}</tbody>
       </table>
     );
   }
 }
 
-function mapStateToProps({ weather }) {  //we are extracting weather form state using ES6
-  return { weather };
+function mapStateToProps({ weather }) {
+  //we are extracting weather form state using ES6
+  return { weather }; //we are doing more ES6 here puting it again into an object, to merge it with props object in the connect statement
 }
 
 export default connect(mapStateToProps)(WeatherList);

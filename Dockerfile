@@ -14,7 +14,9 @@ RUN npm install
 # Expose API port to the outside
 EXPOSE 4444
 
-# Run the tests
+# RUN ls -lh && mkdir test_dir && ls -lh
+
+# # Run the tests
 # RUN npm run test
 
 # Launch application

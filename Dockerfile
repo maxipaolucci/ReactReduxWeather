@@ -7,6 +7,7 @@ WORKDIR /app
 
 # Copy source code
 COPY . .
+# COPY ./package.json ./
 
 # Install dependencies
 RUN npm install
@@ -18,6 +19,6 @@ EXPOSE 4444
 
 # # Run the tests
 # RUN npm run test
-
+ 
 # Launch application
 CMD ["npm","run","start"]

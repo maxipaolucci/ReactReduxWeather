@@ -23,3 +23,17 @@ Click [here](https://github.com/StephenGrider/ReactStarter/releases) then downlo
 > npm install
 > npm start
 ```
+
+### Docker commands
+
+Build the image from dockerfile
+> docker build -t weather-app-img .
+
+Run container (no volume)
+> docker run --rm -p 5555:4444 --name weather-app weather-app-img
+
+Run container with src mounted in volume
+NOTE: In dockerfile to do this remember to comment line COPY . .  and uncomment COPY ./package.json ./
+NOTE 2: In dockerfile uncomment line VOLUME ["/app"]
+> docker run --rm -p 5555:4444 -v <ABSOLUTE_PATH_TO_PROJECT_HOST_MACHINE>:/app -v /app/node_modules --name weather-app weather-app-img
+

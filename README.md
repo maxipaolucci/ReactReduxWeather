@@ -37,3 +37,14 @@ NOTE: In dockerfile to do this remember to comment line COPY . .  and uncomment 
 NOTE 2: In dockerfile uncomment line VOLUME ["/app"]
 > docker run --rm -p 5555:4444 -v <ABSOLUTE_PATH_TO_PROJECT_HOST_MACHINE>:/app -v /app/node_modules --name weather-app weather-app-img
 
+To access the shell to the running container
+> docker exec -ti weather-app sh
+
+To list all containers
+> docker container ls -a
+
+To list all images
+> docker images
+
+To inspect and image
+> docker image inspect <IMAGE_ID>

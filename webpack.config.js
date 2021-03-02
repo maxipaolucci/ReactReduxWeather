@@ -23,6 +23,7 @@ module.exports = {
     historyApiFallback: true,
     contentBase: './',
     port: 4444,
-    host: '0.0.0.0'
+    host: '0.0.0.0',
+    disableHostCheck: true
   }
 };

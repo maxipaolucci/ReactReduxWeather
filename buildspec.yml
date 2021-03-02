@@ -1,0 +1,32 @@
+version: 0.2
+
+# env:
+#   parameter-store:
+#     DOCKER_ID: "/maxipaolucci/dockerID"
+#     DOCKER_PASSWORD: "/maxipaolucci/dockerPassword"
+
+phases: 
+  install:
+    runtime-versions:
+      nodejs: 10
+    commands:
+      # - printenv
+      - echo "installing something"
+  pre_build:
+    commands: 
+      - echo "we are in the pre build phase"
+  build:
+    commands:
+      - echo $CURRENT_BRANCH
+      - ./manage_images.sh
+  post_build:
+    commands:
+      - echo "we are in the post build phase. Do something else..."
+
+# artifacts:
+#   files:
+#     # archive the only file necessary for elastikbeanstalk to redeploy the new docker images pushed
+#     - "docker-compose.yml"
+#     - ".platform/hooks/postdeploy/01-setup-cloudwatch-agent.sh"
+#   discard-paths: no # to keep directory structure
+#   name: atomiCoconut-build-artifact # this name seems to be completely ignored when codepipeline orchastrates this build

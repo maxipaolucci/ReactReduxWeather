@@ -1,13 +1,13 @@
 ### Docker commands
 
 Build the image from dockerfile
-> docker build -t weather-app-img .
+> docker build -t flo2cash_exercise .
 
 Run container 
-> docker run --rm -p 5555:4444 --name weather-app weather-app-img
+> docker run --rm -p 4444:4444 --name flo2cash_exercise_app flo2cash_exercise
 
 To access the shell to the running container
-> docker exec -ti weather-app sh
+> docker exec -ti flo2cash_exercise_app sh
 
 To list all containers
 > docker container ls -a

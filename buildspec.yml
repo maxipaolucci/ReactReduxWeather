@@ -11,7 +11,14 @@ phases:
       nodejs: 10
     commands:
       # - printenv
+      - aws --version
       - echo "installing something"
+      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+      - unzip awscliv2.zip
+      - which aws
+      - ls -l /usr/local/bin/aws
+      - sudo ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+      - aws --version
   pre_build:
     commands: 
       - echo "we are in the pre build phase"
@@ -21,7 +28,7 @@ phases:
       - ./manage_images.sh
   post_build:
     commands:
-      - create_image_definition_file.sh
+      - ./create_image_definition_file.sh
 
 artifacts:
   files:

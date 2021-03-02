@@ -17,7 +17,7 @@ phases:
       - unzip awscliv2.zip
       - which aws
       - ls -l /root/.pyenv/shims/aws
-      - sudo ./aws/install --bin-dir /root/.pyenv/shims --install-dir /usr/local/aws-cli --update
+      - ./aws/install --bin-dir /root/.pyenv/shims --install-dir /usr/local/aws-cli --update
       - aws --version
   pre_build:
     commands: 

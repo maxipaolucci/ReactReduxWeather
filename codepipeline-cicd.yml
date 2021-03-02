@@ -3,18 +3,18 @@ Parameters:
     Description: ElasticBeanstalk application name
     Type: String
     Default: flo2cash_exercise
-  # EBEnvironmentType:
-  #   Type: String
-  #   Description: ElasticBeanstalk environment type
-  #   Default: testing
-  #   AllowedValues:
-  #     - development
-  #     - testing
-  #     - production
+  RepoName:
+    Description: Github repository name
+    Type: String
+    Default: maxipaolucci/ReactReduxWeather
   RepoBranch:
-    Description: Repository branch name
+    Description: Github repository branch name
     Type: String
     Default: master
+  RepoConnectionArn: 
+    Description: Github repository codestar connection arn
+    Type: String
+    Default: arn:aws:codestar-connections:ap-southeast-2:782522910439:connection/961ebc85-18ee-4e81-94b6-ba246702ee28
   CodePipelineS3Bucket:
     Description: S3 bucket to store CodePipeline Resources
     Type: String
@@ -137,8 +137,8 @@ Resources:
                 - Name: SourceArtifact
               Namespace: SourceVariables
               Configuration:
-                ConnectionArn: "arn:aws:codestar-connections:ap-southeast-2:782522910439:connection/961ebc85-18ee-4e81-94b6-ba246702ee28"
-                FullRepositoryId: "maxipaolucci/ReactReduxWeather"
+                ConnectionArn: !Ref RepoConnectionArn
+                FullRepositoryId: !Ref RepoName
                 BranchName: !Ref RepoBranch
                 OutputArtifactFormat: CODE_ZIP
               RunOrder: 1

@@ -1,4 +1,4 @@
-### Docker commands
+# Docker commands
 
 Build the image from dockerfile
 > docker build -t flo2cash_exercise .
@@ -17,3 +17,11 @@ To list all images
 
 To inspect and image
 > docker image inspect <IMAGE_ID>
+
+# CloudFormation
+
+## create stack
+aws2 cloudformation create-stack --stack-name flo2cash-master-codepipeline --capabilities CAPABILITY_NAMED_IAM --template-body file://codepipeline-cicd.yml
+
+## delete stack
+> aws2 cloudformation delete-stack --stack-name flo2cash-master-codepipeline

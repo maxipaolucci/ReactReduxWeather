@@ -1,38 +1,34 @@
 version: 0.2
 
-# env:
-#   parameter-store:
-#     DOCKER_ID: "/maxipaolucci/dockerID"
-#     DOCKER_PASSWORD: "/maxipaolucci/dockerPassword"
+env:
+  variables:
+    ECR_REGISTRY: public.ecr.aws/r5c3t5z5
+    ECR_REPO_NAME: flo2cash_exercise
 
 phases: 
   install:
     runtime-versions:
       nodejs: 10
     commands:
-      # - printenv
-      - aws --version
-      - echo "installing something"
-      - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-      - unzip awscliv2.zip
-      - which aws
-      - ls -l /root/.pyenv/shims/aws
-      - ./aws/install --bin-dir /root/.pyenv/shims --install-dir /usr/local/aws-cli --update
-      - aws --version
+      - ./scripts/update_aws_cli.sh
   pre_build:
-    commands: 
-      - echo "we are in the pre build phase"
+    commands:
+      - echo $CURRENT_BRANCH 
+      # we just want to push to ECR changes in master branch, in all other branches we just build the image to run tests
+      - |
+          if [ "$CURRENT_BRANCH" == "master" ]; then
+            aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY
+          fi
   build:
     commands:
-      - echo $CURRENT_BRANCH
-      - ./manage_images.sh
+      - ./scripts/manage_images.sh
   post_build:
     commands:
-      - ./create_image_definition_file.sh
+      - ./scripts/create_image_definition_file.sh
 
 artifacts:
   files:
-    # archive the only file necessary for elastikbeanstalk to redeploy the new docker images pushed
+    # archive the only file necessary for ECS to deploy the new container
     - "imagedefinitions.json"
   discard-paths: no # to keep directory structure
-  name: flo2cash-build-artifact # this name seems to be completely ignored when codepipeline orchastrates this build
+  name: flo2cash-build-artifact # artifact name

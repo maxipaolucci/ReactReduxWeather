@@ -9,7 +9,7 @@ cat > imagedefinitions.json  <<EOT
 [
   {
     "name": "flo2cash_exercise_app",
-    "imageUri": "public.ecr.aws/r5c3t5z5/flo2cash_exercise:${IMAGE_TAG}"
+    "imageUri": "${ECR_REGISTRY}/${ECR_REPO_NAME}:${IMAGE_TAG}"
   }
 ]
 EOT

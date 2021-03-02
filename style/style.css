@@ -3,6 +3,10 @@ td, th {
   text-align: center !important;
 }
 
+h3.city-name {
+  color: red;
+}
+
 .input-group {
   margin: 20px 0;
 }

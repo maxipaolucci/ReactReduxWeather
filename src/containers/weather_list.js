@@ -14,7 +14,7 @@ class WeatherList extends Component {
     return (
       <tr key={cityData.city.id}>
         <td>
-          <h3>{name}</h3>
+          <h3 className="city-name">{name}</h3>
         </td>
         <td>
           <Chart data={temps} color="orange" units="K" />

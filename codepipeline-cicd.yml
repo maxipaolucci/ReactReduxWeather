@@ -43,6 +43,7 @@ Resources:
       MaxSessionDuration: 3600
       ManagedPolicyArns:
         - 'arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess'
+        - 'arn:aws:iam::aws:policy/AmazonElasticContainerRegistryPublicPowerUser'
       Policies:
         - PolicyName: !Join ['-', [ CodeBuildBasePolicy, !Ref AppName, !Ref RepoBranch, !Ref AWS::Region ] ]
           PolicyDocument:
@@ -114,77 +115,74 @@ Resources:
       TimeoutInMinutes: 60
       QueuedTimeoutInMinutes: 480
 
-  # cicdPipeline:
-  #   Type: AWS::CodePipeline::Pipeline
-  #   DependsOn: CodeBuildProject
-  #   Properties: 
-  #     ArtifactStore:
-  #       Location: !Ref CodePipelineS3Bucket
-  #       Type: S3      
-  #     Name: !Join ['-', [ 'cicd', !Ref AppName, !Ref RepoBranch ] ]
-  #     RoleArn: arn:aws:iam::782522910439:role/service-role/AWSCodePipelineServiceRole-ap-southeast-2-atomiCoconut-testing
-  #     # DisableInboundStageTransitions: 
-  #     #   - StageName: Build
-  #     #     Reason: Disabled transition to save build time while testing
-  #     Stages: 
-  #       - Name: Source 
-  #         Actions: 
-  #           - Name: Source
-  #             ActionTypeId: 
-  #               Category: Source 
-  #               Owner: AWS 
-  #               Version: 1 
-  #               Provider: CodeStarSourceConnection 
-  #             OutputArtifacts: 
-  #               - Name: SourceArtifact
-  #             Namespace: SourceVariables
-  #             Configuration:
-  #               ConnectionArn: "arn:aws:codestar-connections:ap-southeast-2:782522910439:connection/6259b1cc-57cc-4958-ae36-a26259c0c1d7"
-  #               FullRepositoryId: "maxipaolucci/atomiCoconut"
-  #               BranchName: !Ref RepoBranch
-  #               OutputArtifactFormat: CODE_ZIP
-  #             RunOrder: 1
-  #       - Name: Build
-  #         Actions:
-  #           - Name: Build
-  #             ActionTypeId:
-  #               Category: Build
-  #               Owner: AWS
-  #               Provider: CodeBuild
-  #               Version: 1
-  #             RunOrder: 1
-  #             Region: ap-southeast-2
-  #             Namespace: BuildVariables
-  #             Configuration:
-  #               BatchEnabled: 'false'
-  #               ProjectName: !Join ['-', [ !Ref AppName, !Ref RepoBranch ] ]
-  #               EnvironmentVariables: '[{"name":"CURRENT_BRANCH","value":"#{SourceVariables.BranchName}","type":"PLAINTEXT"}]'
-  #             OutputArtifacts:
-  #               - Name: BuildArtifact
-  #             InputArtifacts:
-  #               - Name: SourceArtifact
-  #       - !If 
-  #         - IsDeployable
-  #         - Name: Deploy
-  #           Actions:
-  #             - Name: Deploy
-  #               ActionTypeId:
-  #                 Category: Deploy
-  #                 Owner: AWS
-  #                 Provider: ElasticBeanstalk
-  #                 Version: 1
-  #               RunOrder: 1
-  #               Region: ap-southeast-2
-  #               Namespace: DeployVariables
-  #               Configuration:
-  #                 ApplicationName: !Join ['-', [ !Ref AppName, !Ref EBEnvironmentType ] ]
-  #                 EnvironmentName: !Join ['-', [ !Ref AppName, 'env', !Ref EBEnvironmentType ] ]
-  #               InputArtifacts:
-  #                 - Name: BuildArtifact
-  #         - !Ref AWS::NoValue
-  #     Tags:
-  #       - Key: ENVIRONMENT
-  #         Value: !Ref EBEnvironmentType
-  #       - Key: REPO_BRANCH
-  #         Value: !Ref RepoBranch
+  cicdPipeline:
+    Type: AWS::CodePipeline::Pipeline
+    DependsOn: CodeBuildProject
+    Properties: 
+      ArtifactStore:
+        Location: !Ref CodePipelineS3Bucket
+        Type: S3      
+      Name: !Join ['-', [ 'cicd', !Ref AppName, !Ref RepoBranch ] ]
+      RoleArn: arn:aws:iam::782522910439:role/service-role/AWSCodePipelineServiceRole-ap-southeast-2-atomiCoconut-testing
+      Stages: 
+        - Name: Source 
+          Actions: 
+            - Name: Source
+              ActionTypeId: 
+                Category: Source 
+                Owner: AWS 
+                Version: 1 
+                Provider: CodeStarSourceConnection 
+              OutputArtifacts: 
+                - Name: SourceArtifact
+              Namespace: SourceVariables
+              Configuration:
+                ConnectionArn: "arn:aws:codestar-connections:ap-southeast-2:782522910439:connection/961ebc85-18ee-4e81-94b6-ba246702ee28"
+                FullRepositoryId: "maxipaolucci/ReactReduxWeather"
+                BranchName: !Ref RepoBranch
+                OutputArtifactFormat: CODE_ZIP
+              RunOrder: 1
+        - Name: Build
+          Actions:
+            - Name: Build
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: 1
+              RunOrder: 1
+              Region: ap-southeast-2
+              Namespace: BuildVariables
+              Configuration:
+                BatchEnabled: 'false'
+                ProjectName: !Join ['-', [ !Ref AppName, !Ref RepoBranch ] ]
+                EnvironmentVariables: '[{"name":"CURRENT_BRANCH","value":"#{SourceVariables.BranchName}","type":"PLAINTEXT"}]'
+              OutputArtifacts:
+                - Name: BuildArtifact
+              InputArtifacts:
+                - Name: SourceArtifact
+        - !If 
+          - IsDeployable
+          - Name: Deploy
+            Actions:
+              - Name: Deploy
+                ActionTypeId:
+                  Category: Deploy
+                  Owner: AWS
+                  Provider: ECS
+                  Version: '1'
+                RunOrder: 1
+                Region: ap-southeast-2
+                Namespace: DeployVariables
+                Configuration:
+                  ClusterName: flo2cash-cluster-fargate
+                  ServiceName: flo2cash-service-fargate
+                  FileName: imagedefinitions.json
+                  DeploymentTimeout: '15'
+                InputArtifacts:
+                  - Name: BuildArtifact
+          - !Ref AWS::NoValue
+      Tags:
+        - Key: REPO_BRANCH
+          Value: !Ref RepoBranch
       

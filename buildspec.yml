@@ -21,12 +21,11 @@ phases:
       - ./manage_images.sh
   post_build:
     commands:
-      - echo "we are in the post build phase. Do something else..."
+      - create_image_definition_file.sh
 
-# artifacts:
-#   files:
-#     # archive the only file necessary for elastikbeanstalk to redeploy the new docker images pushed
-#     - "docker-compose.yml"
-#     - ".platform/hooks/postdeploy/01-setup-cloudwatch-agent.sh"
-#   discard-paths: no # to keep directory structure
-#   name: atomiCoconut-build-artifact # this name seems to be completely ignored when codepipeline orchastrates this build
+artifacts:
+  files:
+    # archive the only file necessary for elastikbeanstalk to redeploy the new docker images pushed
+    - "imagedefinitions.json"
+  discard-paths: no # to keep directory structure
+  name: flo2cash-build-artifact # this name seems to be completely ignored when codepipeline orchastrates this build

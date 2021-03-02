@@ -5,19 +5,18 @@ RUN apk add curl
 # Change working directory
 WORKDIR /app
 
-
-COPY ./package.json ./
+# Copy source code
+COPY . .
+# COPY ./package.json ./
 
 # Install dependencies
 RUN npm install
 
-# # Copy source code
-COPY . .
 
 # Expose API port to the outside
 EXPOSE 4444
 
-VOLUME ["/app/node_modules"]
+# VOLUME ["/app/node_modules"]
 
 # RUN ls -lh && mkdir test_dir && ls -lh
 

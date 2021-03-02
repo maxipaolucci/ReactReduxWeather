@@ -19,6 +19,14 @@ Parameters:
     Description: S3 bucket to store CodePipeline Resources
     Type: String
     Default: codepipeline-ap-southeast-2-215851890597
+  ECSClusterName:
+    Description: ECS Fargate cluster name
+    Type: String
+    Default: flo2cash-cluster-fargate
+  ECSServiceName:
+    Description: ECS Service name
+    Type: String
+    Default: flo2cash-service-fargate
 
 Conditions: 
   # The app is deployable if we are building the master branch
@@ -175,8 +183,8 @@ Resources:
                 Region: ap-southeast-2
                 Namespace: DeployVariables
                 Configuration:
-                  ClusterName: flo2cash-cluster-fargate
-                  ServiceName: flo2cash-service-fargate
+                  ClusterName: !Ref ECSClusterName
+                  ServiceName: !Ref ECSServiceName
                   FileName: imagedefinitions.json
                   DeploymentTimeout: '15'
                 InputArtifacts:

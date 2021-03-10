@@ -9,6 +9,8 @@ fi
 # build image
 docker build -t $ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG .
 
+if [[ "$?" -ne 0 ]]; then echo "Docker build failed."; exit 1; fi
+
 if [[ "$CURRENT_BRANCH" == "master" ]]; then
   # uplaod to ECR
   docker push $ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG

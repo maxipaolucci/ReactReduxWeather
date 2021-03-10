@@ -21,7 +21,7 @@ To inspect and image
 # CloudFormation
 
 ## create stack
-aws2 cloudformation create-stack --stack-name flo2cash-master-codepipeline --capabilities CAPABILITY_NAMED_IAM --template-body file://codepipeline-cicd.yml
+aws cloudformation create-stack --stack-name flo2cash-master-codepipeline --capabilities CAPABILITY_NAMED_IAM --template-body file://codepipeline-cicd.yml
 
 ## delete stack
-> aws2 cloudformation delete-stack --stack-name flo2cash-master-codepipeline
+> aws cloudformation delete-stack --stack-name flo2cash-master-codepipeline
